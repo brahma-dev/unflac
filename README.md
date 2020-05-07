@@ -11,7 +11,7 @@ external dependencies and their quirks.
 You need [Go](https://golang.org/) installed.
 
 ```
-go get -u github.com/ftrvxmtrx/unflac
+go get -u git.sr.ht/~ft/unflac
 ~/go/bin/unflac -h
 ```
 
