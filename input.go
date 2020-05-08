@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ftrvxmtrx/chub/cue"
+	"git.sr.ht/~ft/cue"
 	"github.com/gammazero/workerpool"
 )
 

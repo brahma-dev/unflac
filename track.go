@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ftrvxmtrx/chub/cue"
+	"git.sr.ht/~ft/cue"
 )
 
 type Track struct {

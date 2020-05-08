@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ftrvxmtrx/chardet"
-	"github.com/ftrvxmtrx/chub/cue"
+	"git.sr.ht/~ft/cue"
+	"github.com/asdfsx/gochardet"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/ianaindex"
 )
