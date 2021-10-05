@@ -124,6 +124,12 @@ func NewInput(path string) (in *Input, err error) {
 					t.Composer = words[1]
 				}
 			}
+			if t.Performer == "" {
+				t.Performer = in.Performer
+			}
+			if t.SongWriter == "" {
+				t.SongWriter = in.SongWriter
+			}
 
 			audio.Tracks = append(audio.Tracks, t)
 			in.TotalTracks++
