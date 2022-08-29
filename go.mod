@@ -1,11 +1,15 @@
 module git.sr.ht/~ft/unflac
 
-go 1.16
+go 1.19
 
 require (
-	git.sr.ht/~ft/cue v0.0.0-20200508193024-48a5e773bbae
+	git.sr.ht/~ft/cue v0.0.0-20220829223741-08ef10fe2cae
 	github.com/asdfsx/gochardet v0.0.0-20170222172924-16496b196583
-	github.com/gammazero/workerpool v1.1.2
+	github.com/gammazero/workerpool v1.1.3
+	golang.org/x/text v0.3.7
+)
+
+require (
+	github.com/gammazero/deque v0.2.0 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
-	golang.org/x/text v0.3.6
 )
