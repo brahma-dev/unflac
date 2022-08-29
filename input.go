@@ -50,7 +50,7 @@ func NewInput(path string) (in *Input, err error) {
 	var audio *AudioFile
 	var filesFromCue []*cue.File
 	for _, f := range sheet.Files {
-		if f.Type != cue.FileTypeWave {
+		if f.Type != cue.FileTypeWave && f.Type != cue.FileTypeFlac {
 			continue
 		} else if audio, err = NewAudio(filepath.Join(dirPath, f.Name)); err != nil {
 			err = fmt.Errorf("%s: %s", f.Name, err)
