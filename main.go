@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -52,6 +53,13 @@ func main() {
 	var err error
 	nameTmpl = template.New("-n").Funcs(template.FuncMap{"Elem": pathReplaceChars})
 	if nameTmpl, err = nameTmpl.Parse(*nameTmplV); err != nil {
+		log.Fatal(err)
+	}
+
+	if _, err = exec.LookPath("ffprobe"); err != nil {
+		log.Fatal(err)
+	}
+	if _, err = exec.LookPath("ffmpeg"); err != nil {
 		log.Fatal(err)
 	}
 
