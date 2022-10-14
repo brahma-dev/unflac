@@ -31,7 +31,7 @@ var (
 )
 
 func main() {
-	flag.Var(&ffmpegArgs, "arg-ffmpeg", `Add an argument to ffmpeg. Example: "-arg-ffmpeg -qscale:a --arg-ffmpeg 2"`)
+	flag.Var(&ffmpegArgs, "F", `Add an argument to ffmpeg. Example: "-F -qscale:a -F 2"`)
 	flag.Var(&trackArgs, "t", `Extract specific track(s). Example: "-t 1 -t 2"`)
 	nameTmplV := flag.String(
 		"n",

@@ -25,7 +25,7 @@ Yeah, that's it.
 
  * Set a specific sample rate for output files:
 
-   `unflac -arg-ffmpeg -ar -arg-ffmpeg 44100 ...`
+   `unflac -F -ar -F 44100 ...`
 
    `man ffmpeg` contains a lot more.
 
