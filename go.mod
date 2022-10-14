@@ -6,7 +6,7 @@ require (
 	git.sr.ht/~ft/cue v0.0.0-20220829223741-08ef10fe2cae
 	github.com/asdfsx/gochardet v0.0.0-20170222172924-16496b196583
 	github.com/gammazero/workerpool v1.1.3
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.3.8
 )
 
 require (
