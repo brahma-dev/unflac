@@ -23,11 +23,11 @@ Yeah, that's it.
 
 ## Some useful options
 
- * Set a specific sample rate for output files:
+ * Set a specific sample format and rate for output files:
 
-   `unflac -F -ar -F 44100 ...`
+   `unflac -F -sample_fmt -F s16 -F -ar -F 192000 ...`
 
-   `man ffmpeg` contains a lot more.
+   See `ffmpeg -sample_fmts`. `man ffmpeg` contains a lot more.
 
 ## Output file naming
 
