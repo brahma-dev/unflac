@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"git.sr.ht/~ft/cue"
@@ -90,6 +91,27 @@ func cueSheetFromBytes(raw []byte) (sheet *cue.Sheet, err error) {
 	return
 }
 
-func pathReplaceChars(s string) string {
-	return strings.ReplaceAll(s, "/", "∕")
+func findAudioFile(dir, name string) (string, bool) {
+	var f *os.File
+	var fis []os.FileInfo
+	var err error
+
+	name, _ = strings.CutSuffix(name, filepath.Ext(name))
+	if f, err = os.Open(dir); err == nil {
+		defer f.Close()
+		if fis, err = f.Readdir(0); err == nil {
+			for _, fi := range fis {
+				n, _ := strings.CutSuffix(fi.Name(), filepath.Ext(fi.Name()))
+				if n != name {
+					continue
+				}
+				path := filepath.Join(dir, fi.Name())
+				var af *AudioFile
+				if af, err = NewAudio(path); err == nil && af.SampleRate > 0 {
+					return path, true
+				}
+			}
+		}
+	}
+	return "", false
 }

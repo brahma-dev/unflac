@@ -52,8 +52,15 @@ func NewInput(path string) (in *Input, err error) {
 	for _, f := range sheet.Files {
 		if f.Type != cue.FileTypeWave && f.Type != cue.FileTypeFlac {
 			continue
-		} else if audio, err = NewAudio(filepath.Join(dirPath, f.Name)); err != nil {
-			err = fmt.Errorf("%s: %s", f.Name, err)
+		}
+		path := filepath.Join(dirPath, f.Name)
+		if _, err = os.Stat(path); err != nil && os.IsNotExist(err) {
+			if newPath, ok := findAudioFile(dirPath, f.Name); ok {
+				path = newPath
+			}
+		}
+		if audio, err = NewAudio(path); err != nil {
+			err = fmt.Errorf("%s: %s", path, err)
 			return
 		}
 		in.Audio = append(in.Audio, audio)
