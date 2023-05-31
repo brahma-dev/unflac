@@ -63,9 +63,9 @@ func NewInput(path string) (in *Input, err error) {
 		return nil, fmt.Errorf("no audio files")
 	}
 
-	in.Performer = sheet.Performer
-	in.SongWriter = sheet.Songwriter
-	in.Title = sheet.Title
+	in.Performer = strings.TrimSpace(sheet.Performer)
+	in.SongWriter = strings.TrimSpace(sheet.Songwriter)
+	in.Title = strings.TrimSpace(sheet.Title)
 
 	var diskNumber int
 	for _, c := range sheet.Comments {
@@ -74,11 +74,11 @@ func NewInput(path string) (in *Input, err error) {
 		} else {
 			switch words[0] {
 			case "DATE":
-				in.Date = words[1]
+				in.Date = strings.TrimSpace(words[1])
 			case "GENRE":
-				in.Genre = words[1]
+				in.Genre = strings.TrimSpace(words[1])
 			case "COMPOSER":
-				in.Composer = words[1]
+				in.Composer = strings.TrimSpace(words[1])
 			case "DISCNUMBER":
 				if len(in.Audio) == 1 {
 					// FIXME no idea what to do with several discnumber comments in a cue sheet
@@ -108,9 +108,9 @@ func NewInput(path string) (in *Input, err error) {
 
 			t := &Track{
 				Number:      ft.Number,
-				Title:       ft.Title,
-				Performer:   ft.Performer,
-				SongWriter:  ft.Songwriter,
+				Title:       strings.TrimSpace(ft.Title),
+				Performer:   strings.TrimSpace(ft.Performer),
+				SongWriter:  strings.TrimSpace(ft.Songwriter),
 				Album:       in.Title,
 				Genre:       in.Genre,
 				Date:        in.Date,
@@ -121,7 +121,7 @@ func NewInput(path string) (in *Input, err error) {
 			for _, c := range ft.Comments {
 				if strings.HasPrefix(c, "COMPOSER") {
 					words := strings.SplitAfterN(c, " ", 2)
-					t.Composer = words[1]
+					t.Composer = strings.TrimSpace(words[1])
 				}
 			}
 			if t.Performer == "" {
