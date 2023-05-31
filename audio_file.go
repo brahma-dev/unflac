@@ -46,7 +46,12 @@ func NewAudio(path string) (af *AudioFile, err error) {
 
 func (af *AudioFile) Extract(t *Track, filename string) (err error) {
 	// ffmpeg options
-	args := []string{"-loglevel", "error", "-y", "-i", af.Path, "-map_metadata", "-1"}
+	args := []string{
+		"-loglevel", "error",
+		"-y",
+		"-i", af.Path,
+		"-map_metadata", "-1",
+	}
 	tags := []Tag{
 		{"composer", t.Composer},
 		{"artist", t.Artist()},
@@ -110,6 +115,7 @@ func (af *AudioFile) Extract(t *Track, filename string) (err error) {
 	if t.EndAtSample != 0 {
 		atrim = fmt.Sprintf("%s:end_sample=%d", atrim, t.EndAtSample)
 	}
+	atrim = fmt.Sprintf("%s,asetpts=PTS-STARTPTS", atrim)
 	args = append(args, "-af", atrim, filename)
 
 	cmd := exec.Command("ffmpeg", args...)
