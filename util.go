@@ -13,6 +13,24 @@ import (
 	"golang.org/x/text/encoding/ianaindex"
 )
 
+var pathReplaceChars func(string) string
+
+func init() {
+	r := strings.NewReplacer(
+		`/`, `∕`,
+		`"`, `“`,
+		`?`, `？`,
+		`*`, `∗`,
+		`\`, `⧵`,
+		`|`, `∣`,
+		`;`, `;`,
+		`:`, `∶`,
+		`<`, `‹`,
+		`>`, `›`,
+	)
+	pathReplaceChars = r.Replace
+}
+
 func decoderToUTF8For(b []byte) (dec *encoding.Decoder, err error) {
 	var best *chardet.Result
 	var enc encoding.Encoding
