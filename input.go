@@ -175,7 +175,7 @@ func (in *Input) Artist() string {
 	return "Unknown Artist"
 }
 
-func (in *Input) Split(pool *workerpool.WorkerPool, firstErr chan<- error) (err error) {
+func (in *Input) Split(filter func(string) bool, pool *workerpool.WorkerPool, firstErr chan<- error) (err error) {
 	for _, a := range in.Audio {
 		for _, t := range a.Tracks {
 			if len(trackArgs) > 0 && !trackArgs.Has(t.Number) {
@@ -197,6 +197,9 @@ func (in *Input) Split(pool *workerpool.WorkerPool, firstErr chan<- error) (err 
 
 			pool.Submit(func(a *AudioFile, t *Track, trackPath string) func() {
 				return func() {
+					if !filter(trackPath) {
+						return
+					}
 					if err = a.Extract(t, trackPath); err != nil {
 						firstErr <- fmt.Errorf("%s: %s", trackPath, err)
 					} else if !*quiet {

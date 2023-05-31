@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"text/template"
 
 	"github.com/gammazero/workerpool"
@@ -29,7 +30,14 @@ var (
 	trackArgs  IntListFlag
 	ffmpegArgs StringListFlag
 	nameTmpl   *template.Template
+	written    sync.Map
 )
+
+func noOverwrite(path string) (proceed bool) {
+	_, done := written.LoadOrStore(path, struct{}{})
+	proceed = !done
+	return
+}
 
 func main() {
 	flag.Var(&ffmpegArgs, "F", `Add an argument to ffmpeg. Example: "-F -qscale:a -F 2"`)
@@ -93,7 +101,7 @@ func main() {
 
 	for _, in := range inputs {
 		if !*dryRun {
-			if err := in.Split(wp, firstErr); err != nil {
+			if err := in.Split(noOverwrite, wp, firstErr); err != nil {
 				log.Fatalf("%s: %s", in.Path, err)
 			}
 		}
