@@ -2,24 +2,20 @@
 
 A command line tool for fast frame accurate audio image + cue sheet splitting.
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/unflac.svg)](https://repology.org/project/unflac/versions)
+
 This project is started mostly out of frustration over supporting
 [split2flac](https://github.com/ftrvxmtrx/split2flac) with all the
 external dependencies and their quirks.
 
-## Installation/upgrade and running
+## Manual installation
 
-You need [Go](https://golang.org/) installed.
+You need [Go](https://golang.org/) and `ffmpeg` installed.
 
 ```
 go install git.sr.ht/~ft/unflac@latest
 ~/go/bin/unflac -h
 ```
-
-## Dependencies
-
- * ffmpeg (ffprobe command is also used, part of ffmpeg package)
-
-Yeah, that's it.
 
 ## Some useful options
 
