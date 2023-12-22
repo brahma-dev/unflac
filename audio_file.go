@@ -83,6 +83,15 @@ func (af *AudioFile) Extract(t *Track, filename string) (err error) {
 			args = append(args, "-ar", "192000")
 		}
 
+	case "wv":
+		tags = append(tags,
+			Tag{"Track", fmt.Sprintf("%d/%d", t.Number, (*t.TotalTracks))},
+			Tag{"Year", t.Date},
+		)
+		if diskNumber != "" && totalDisks != "" {
+			tags = append(tags, Tag{"Media", fmt.Sprintf("%s/%s", diskNumber, totalDisks)})
+		}
+
 	case "ogg":
 		tags = append(tags,
 			Tag{"tracknumber", strconv.Itoa(t.Number)},
