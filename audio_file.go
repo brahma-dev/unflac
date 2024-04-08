@@ -27,7 +27,7 @@ func NewAudio(path string) (af *AudioFile, err error) {
 	cmd := exec.Command(
 		"ffprobe",
 		"-loglevel", "error",
-		"-of", "compact=nk=1:p=0",
+		"-of", "compact=nk=1:p=0:s=' '",
 		"-show_entries", "stream=sample_rate",
 		"-select_streams", "a",
 		af.Path,
