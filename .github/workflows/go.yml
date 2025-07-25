@@ -3,11 +3,11 @@ name: Build and Release Go Binary
 on:
   push:
     tags:
-      - 'v*'  # Triggers on version tags like v1.0.0
+      - 'v*'
 
 jobs:
   build:
-    name: Build for all platforms
+    name: Build (${{ matrix.goos }}-${{ matrix.goarch }})
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,27 +15,51 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64, arm64]
 
+    outputs:
+      artifact-names: ${{ steps.set-artifact.outputs.names }}
+
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'  # Adjust if needed
+          go-version: '1.22'
 
       - name: Build binary
         run: |
           mkdir -p dist
           EXT=""
           if [ "${{ matrix.goos }}" = "windows" ]; then EXT=".exe"; fi
+          OUT="unflac-${{ matrix.goos }}-${{ matrix.goarch }}$EXT"
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "dist/$OUT"
 
-          OUTPUT="unflac-${{ matrix.goos }}-${{ matrix.goarch }}$EXT"
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "dist/$OUTPUT"
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/
 
-      - name: Upload Release Assets
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Flatten artifact directory
+        run: |
+          mkdir final
+          find dist -type f -exec mv {} final/ \;
+
+      - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: final/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
