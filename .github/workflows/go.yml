@@ -64,36 +64,47 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   docker:
-    name: Build and Push to GHCR
-    needs: release
+    needs: build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Download Linux AMD64 binary
+      - name: Download amd64 binary
         uses: actions/download-artifact@v4
         with:
           name: build-linux-amd64
-          path: dist
+          path: dist/amd64
 
-      - name: Rename binary for Docker
-        run: mv dist/unflac-linux-amd64 ./unflac-linux-amd64
+      - name: Download arm64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: build-linux-arm64
+          path: dist/arm64
 
-      - name: Log in to GitHub Container Registry
+      - name: Prepare amd64 binary
+        run: mv dist/amd64/unflac-linux-amd64 ./unflac-amd64
+
+      - name: Prepare arm64 binary
+        run: mv dist/arm64/unflac-linux-arm64 ./unflac-arm64
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
+      - name: Build and push multi-arch image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: Dockerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository }}/unflac:${{ github.ref_name }}
             ghcr.io/${{ github.repository }}/unflac:latest
+          platforms: linux/amd64,linux/arm64
+          file: Dockerfile
+          context: .
+          # Build args let you specify the binary to copy per arch
+          build-args: |
+            AMD64_BINARY=unflac-amd64
+            ARM64_BINARY=unflac-arm64
